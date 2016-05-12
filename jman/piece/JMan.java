@@ -51,13 +51,13 @@ public class JMan extends Piece {
 	public void step(int i) {
 		setActed(true);
 		if (i == 0) {
-			moveTo(0, -1);
+			position(0, -1);
 		} else if (i == 1) {
-			moveTo(0, 1);
+			position(0, 1);
 		} else if (i == 2) {
-			moveTo(-1, 0);
+			position(-1, 0);
 		} else if (i == 3) {
-			moveTo(1, 0);
+			position(1, 0);
 		}
 	}
 
@@ -69,23 +69,19 @@ public class JMan extends Piece {
 	 * @param moveY
 	 *            move the position of the y-axis
 	 */
-	public void moveTo(int moveX, int moveY) {
-		Piece piece = getMap().pieceAt(getX(), getY());
-		Color pieceColor = piece.getColor();
+	public void position(int moveX, int moveY) {
+
 		int newX = getX() + moveX;
 		int newY = getY() + moveY;
 
-		if (!getMap().isInGrid(getX(), getY()))
+		if (!getMap().isInGrid(newX, newY))
 			return;
 
-		if (piece == null)
+		if (getMap().pieceAt(newX, newY) == null)
 			getMap().move(getX(), getY(), newX, newY);
 
-		if (piece instanceof Block)
-			return;
-
-		if (!(piece instanceof Block) && isCapture(getColor(), pieceColor)) {
-			setColor(pieceColor);
+		if (isCapture(getColor(), getMap().pieceAt(newX, newY).getColor())) {
+			setColor(getMap().pieceAt(newX, newY).getColor());
 			getMap().move(getX(), getY(), newX, newY);
 		}
 	}
